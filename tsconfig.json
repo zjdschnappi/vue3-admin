@@ -9,6 +9,7 @@
     "strict": true,
     "jsx": "preserve",
     "jsxImportSource": "vue",
+    "noImplicitAny": false,
     "importHelpers": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
