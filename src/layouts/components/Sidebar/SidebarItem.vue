@@ -10,16 +10,16 @@ interface Props {
   basePath?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const parentProps = withDefaults(defineProps<Props>(), {
   basePath: ""
 })
 
 /** 是否始终显示根菜单 */
-const alwaysShowRootMenu = computed(() => props.item.meta?.alwaysShow)
+const alwaysShowRootMenu = computed(() => parentProps.item.meta?.alwaysShow)
 
 /** 显示的子菜单 */
 const showingChildren = computed(() => {
-  return props.item.children?.filter((child) => !child.meta?.hidden) ?? []
+  return parentProps.item.children?.filter((child) => !child.meta?.hidden) ?? []
 })
 
 /** 显示的子菜单数量 */
@@ -36,7 +36,7 @@ const theOnlyOneChild = computed(() => {
     case number === 1:
       return showingChildren.value[0]
     default:
-      return { ...props.item, path: "" }
+      return { ...parentProps.item, path: "" }
   }
 })
 
@@ -45,10 +45,10 @@ const resolvePath = (routePath: string) => {
   switch (true) {
     case isExternal(routePath):
       return routePath
-    case isExternal(props.basePath):
-      return props.basePath
+    case isExternal(parentProps.basePath):
+      return parentProps.basePath
     default:
-      return path.resolve(props.basePath, routePath)
+      return path.resolve(parentProps.basePath, routePath)
   }
 }
 </script>
@@ -56,22 +56,14 @@ const resolvePath = (routePath: string) => {
 <template>
   <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
     <SidebarItemLink v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
-      <el-menu-item :index="resolvePath(theOnlyOneChild.path)">
-        <SvgIcon v-if="theOnlyOneChild.meta.svgIcon" :name="theOnlyOneChild.meta.svgIcon" />
-        <component v-else-if="theOnlyOneChild.meta.elIcon" :is="theOnlyOneChild.meta.elIcon" class="el-icon" />
-        <template v-if="theOnlyOneChild.meta.title" #title>
-          {{ theOnlyOneChild.meta.title }}
-        </template>
-      </el-menu-item>
+      <v-list-item link :index="resolvePath(theOnlyOneChild.path)" :title="theOnlyOneChild.meta.title" />
     </SidebarItemLink>
   </template>
-  <el-sub-menu v-else :index="resolvePath(props.item.path)" teleported>
-    <template #title>
-      <SvgIcon v-if="props.item.meta?.svgIcon" :name="props.item.meta.svgIcon" />
-      <component v-else-if="props.item.meta?.elIcon" :is="props.item.meta.elIcon" class="el-icon" />
-      <span v-if="props.item.meta?.title">{{ props.item.meta.title }}</span>
+  <v-list-group v-else :value="parentProps.item.meta?.title">
+    <template v-slot:activator="{ props }">
+      <v-list-item v-bind="props" :title="parentProps.item.meta?.title" />
     </template>
-    <template v-if="props.item.children">
+    <template v-if="parentProps.item.children">
       <SidebarItem
         v-for="child in showingChildren"
         :key="child.path"
@@ -79,7 +71,23 @@ const resolvePath = (routePath: string) => {
         :base-path="resolvePath(child.path)"
       />
     </template>
-  </el-sub-menu>
+  </v-list-group>
+
+  <!-- <el-sub-menu v-else :index="resolvePath(parentProps.item.path)" teleported>
+    <template #title>
+      <SvgIcon v-if="parentProps.item.meta?.svgIcon" :name="parentProps.item.meta.svgIcon" />
+      <component v-else-if="parentProps.item.meta?.elIcon" :is="parentProps.item.meta.elIcon" class="el-icon" />
+      <span v-if="parentProps.item.meta?.title">{{ parentProps.item.meta.title }}</span>
+    </template>
+    <template v-if="parentProps.item.children">
+      <SidebarItem
+        v-for="child in showingChildren"
+        :key="child.path"
+        :item="child"
+        :base-path="resolvePath(child.path)"
+      />
+    </template>
+  </el-sub-menu> -->
 </template>
 
 <style lang="scss" scoped>

@@ -11,6 +11,8 @@ initTheme()
 
 <template>
   <el-config-provider :locale="zhCn">
-    <router-view />
+    <v-app>
+      <router-view />
+    </v-app>
   </el-config-provider>
 </template>

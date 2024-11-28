@@ -4,10 +4,9 @@ import { storeToRefs } from "pinia"
 import { useAppStore } from "@/store/modules/app"
 import { useSettingsStore } from "@/store/modules/settings"
 import { useUserStore } from "@/store/modules/user"
-import { UserFilled } from "@element-plus/icons-vue"
 import Hamburger from "../Hamburger/index.vue"
 import Breadcrumb from "../Breadcrumb/index.vue"
-import Sidebar from "../Sidebar/index.vue"
+
 import Notify from "@/components/Notify/index.vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import Screenfull from "@/components/Screenfull/index.vue"
@@ -44,31 +43,22 @@ const logout = () => {
       @toggle-click="toggleSidebar"
     />
     <Breadcrumb v-if="!isTop || isMobile" class="breadcrumb" />
-    <Sidebar v-if="isTop && !isMobile" class="sidebar" />
     <div class="right-menu">
       <SearchMenu v-if="showSearchMenu" class="right-menu-item" />
       <Screenfull v-if="showScreenfull" class="right-menu-item" />
       <ThemeSwitch v-if="showThemeSwitch" class="right-menu-item" />
       <Notify v-if="showNotify" class="right-menu-item" />
-      <el-dropdown class="right-menu-item">
-        <div class="right-menu-avatar">
-          <el-avatar :icon="UserFilled" :size="30" />
-          <span>{{ userStore.username }}</span>
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <a target="_blank" href="https://github.com/un-pany/v3-admin-vite">
-              <el-dropdown-item>GitHub</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://gitee.com/un-pany/v3-admin-vite">
-              <el-dropdown-item>Gitee</el-dropdown-item>
-            </a>
-            <el-dropdown-item divided @click="logout">
-              <span style="display: block">退出登录</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
+      <v-menu open-on-hover>
+        <template v-slot:activator="{ props }">
+          <span v-bind="props">{{ userStore.username }}</span>
         </template>
-      </el-dropdown>
+
+        <v-list>
+          <v-list-item @click="logout" :height="10">
+            <v-list-item-title>退出登录</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </div>
 </template>

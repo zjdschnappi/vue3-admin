@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref } from "vue"
-import { Setting } from "@element-plus/icons-vue"
 
 interface Props {
   buttonTop?: number
@@ -16,13 +15,11 @@ const show = ref(false)
 
 <template>
   <div class="handle-button" @click="show = true">
-    <el-icon :size="24">
-      <Setting />
-    </el-icon>
+    <v-icon :size="24" icon="mdi-wrench" />
   </div>
-  <el-drawer v-model="show" size="300px" :with-header="false">
+  <v-navigation-drawer v-model="show" location="right" temporary>
     <slot />
-  </el-drawer>
+  </v-navigation-drawer>
 </template>
 
 <style lang="scss" scoped>

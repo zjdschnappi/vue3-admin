@@ -64,6 +64,12 @@ module.exports = {
         math: "always"
       }
     ],
+    "vue/valid-v-slot": [
+      "error",
+      {
+        allowModifiers: true
+      }
+    ],
     // Prettier
     "prettier/prettier": [
       "error",

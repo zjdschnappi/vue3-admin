@@ -5,8 +5,6 @@ import { type TagView, useTagsViewStore } from "@/store/modules/tags-view"
 import { usePermissionStore } from "@/store/modules/permission"
 import { useRouteListener } from "@/hooks/useRouteListener"
 import path from "path-browserify"
-import ScrollPane from "./ScrollPane.vue"
-import { Close } from "@element-plus/icons-vue"
 
 const instance = getCurrentInstance()
 const router = useRouter()
@@ -164,7 +162,7 @@ onMounted(() => {
 
 <template>
   <div class="tags-view-container">
-    <ScrollPane class="tags-view-wrapper" :tag-refs="tagRefs">
+    <div class="tags-view-wrapper" :tag-refs="tagRefs">
       <router-link
         ref="tagRefs"
         v-for="tag in tagsViewStore.visitedViews"
@@ -176,11 +174,9 @@ onMounted(() => {
         @contextmenu.prevent="openMenu(tag, $event)"
       >
         {{ tag.meta?.title }}
-        <el-icon v-if="!isAffix(tag)" :size="12" @click.prevent.stop="closeSelectedTag(tag)">
-          <Close />
-        </el-icon>
+        <v-icon icon="mdi-close" v-if="!isAffix(tag)" :size="12" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
-    </ScrollPane>
+    </div>
     <ul v-show="visible" class="contextmenu" :style="{ left: left + 'px', top: top + 'px' }">
       <li @click="refreshSelectedTag(selectedTag)">刷新</li>
       <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭</li>
