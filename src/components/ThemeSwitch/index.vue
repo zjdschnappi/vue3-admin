@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { type ThemeName, useTheme } from "@/hooks/useTheme"
-import { MagicStick } from "@element-plus/icons-vue"
+import { mergeProps, ref } from "vue"
 
 const { themeList, activeThemeName, setTheme } = useTheme()
 
-const handleChangeTheme = ({ clientX, clientY }: MouseEvent, themeName: ThemeName) => {
+const handleChangeTheme = ({ clientX, clientY }: any, themeName: ThemeName) => {
   const maxRadius = Math.hypot(
     Math.max(clientX, window.innerWidth - clientX),
     Math.max(clientY, window.innerHeight - clientY)
@@ -16,34 +16,36 @@ const handleChangeTheme = ({ clientX, clientY }: MouseEvent, themeName: ThemeNam
   const handler = () => {
     setTheme(themeName)
   }
+
   document.startViewTransition ? document.startViewTransition(handler) : handler()
 }
+const menu = ref(false)
 </script>
 
 <template>
-  <el-dropdown trigger="click">
-    <div>
-      <el-tooltip effect="dark" content="主题模式" placement="bottom">
-        <el-icon :size="20">
-          <MagicStick />
-        </el-icon>
-      </el-tooltip>
-    </div>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item
+  <v-menu v-model="menu">
+    <template #activator="{ props: menu }">
+      <v-tooltip text="主题模式">
+        <template #activator="{ props: tooltip }">
+          <v-icon :size="20" v-bind="mergeProps(menu, tooltip)" icon="mdi-magic-staff" />
+        </template>
+      </v-tooltip>
+    </template>
+    <template #default>
+      <v-list>
+        <v-list-item
           v-for="(theme, index) in themeList"
           :key="index"
           :disabled="activeThemeName === theme.name"
           @click="
-            (e: MouseEvent) => {
+            (e: MouseEvent | KeyboardEvent) => {
               handleChangeTheme(e, theme.name)
             }
           "
         >
           <span>{{ theme.title }}</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
+        </v-list-item>
+      </v-list>
     </template>
-  </el-dropdown>
+  </v-menu>
 </template>

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, ref, watchEffect } from "vue"
-import { ElMessage } from "element-plus"
 import screenfull from "screenfull"
 
 interface Props {
@@ -31,7 +30,8 @@ const fullscreenSvgName = computed(() => {
 })
 const handleFullscreenClick = () => {
   const dom = document.querySelector(props.element) || undefined
-  screenfull.isEnabled ? screenfull.toggle(dom) : ElMessage.warning("您的浏览器无法工作")
+  screenfull.isEnabled ? screenfull.toggle(dom) : alert("您的浏览器无法工作")
+  // ElMessage.warning("您的浏览器无法工作")
 }
 const handleFullscreenChange = () => {
   isFullscreen.value = screenfull.isFullscreen
@@ -75,21 +75,28 @@ const handleContentFullClick = () => {
 <template>
   <div>
     <!-- 全屏 -->
-    <el-tooltip v-if="!content" effect="dark" :content="fullscreenTips" placement="bottom">
-      <SvgIcon :name="fullscreenSvgName" @click="handleFullscreenClick" />
-    </el-tooltip>
-    <!-- 内容区 -->
-    <el-dropdown v-else :disabled="isFullscreen">
-      <SvgIcon :name="contentLargeSvgName" />
-      <template #dropdown>
-        <el-dropdown-menu>
-          <!-- 内容区放大 -->
-          <el-dropdown-item @click="handleContentLargeClick">{{ contentLargeTips }}</el-dropdown-item>
-          <!-- 内容区全屏 -->
-          <el-dropdown-item @click="handleContentFullClick">内容区全屏</el-dropdown-item>
-        </el-dropdown-menu>
+    <v-tooltip v-if="!content" :text="fullscreenTips">
+      <template v-slot:activator="{ props }">
+        <SvgIcon :name="fullscreenSvgName" v-bind="props" @click="handleFullscreenClick" />
       </template>
-    </el-dropdown>
+    </v-tooltip>
+
+    <!-- 内容区 -->
+    <v-menu open-on-hover v-else :disabled="isFullscreen">
+      <template v-slot:activator="{ props }">
+        <SvgIcon v-bind="props" :name="contentLargeSvgName" />
+      </template>
+
+      <v-list density="compact">
+        <!-- 内容区放大 -->
+        <v-list-item @click="handleContentLargeClick" density="compact">
+          <v-list-item-title>{{ contentLargeTips }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="handleContentFullClick" density="compact">
+          <v-list-item-title>内容区全屏</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </div>
 </template>
 

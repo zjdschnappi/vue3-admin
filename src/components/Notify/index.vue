@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue"
-import { ElMessage } from "element-plus"
-import { Bell } from "@element-plus/icons-vue"
+// import { ElMessage } from "element-plus"
+// import { Bell } from "@element-plus/icons-vue"
 import NotifyList from "./NotifyList.vue"
 import { type ListItem, notifyData, messageData, todoData } from "./data"
 
@@ -23,6 +23,7 @@ const badgeMax = 99
 const popoverWidth = 350
 /** 当前 Tab */
 const activeName = ref<TabName>("通知")
+const menu = ref(false)
 /** 所有数据 */
 const data = ref<DataItem[]>([
   // 通知数据
@@ -46,39 +47,43 @@ const data = ref<DataItem[]>([
 ])
 
 const handleHistory = () => {
-  ElMessage.success(`跳转到${activeName.value}历史页面`)
+  // ElMessagesuccess(`跳转到${activeName.value}历史页面`)
+  window.alert(`跳转到${activeName.value}历史页面`)
 }
 </script>
 
 <template>
   <div class="notify">
-    <el-popover placement="bottom" :width="popoverWidth" trigger="click">
-      <template #reference>
-        <el-badge :value="badgeValue" :max="badgeMax" :hidden="badgeValue === 0">
-          <el-tooltip effect="dark" content="消息通知" placement="bottom">
-            <el-icon :size="20">
-              <Bell />
-            </el-icon>
-          </el-tooltip>
-        </el-badge>
+    <v-menu v-model="menu" :close-on-content-click="false" location="end" :width="popoverWidth">
+      <template #activator="{ props }">
+        <v-badge v-bind="props" color="error" :content="badgeValue" :max="badgeMax" :hidden="badgeValue === 0">
+          <v-tooltip text="消息通知">
+            <template #activator="{ props }">
+              <v-icon v-bind="props" :size="20" icon="mdi-bell" />
+            </template>
+          </v-tooltip>
+        </v-badge>
       </template>
       <template #default>
-        <el-tabs v-model="activeName" class="demo-tabs" stretch>
-          <el-tab-pane v-for="(item, index) in data" :name="item.name" :key="index">
-            <template #label>
-              {{ item.name }}
-              <el-badge :value="item.list.length" :max="badgeMax" :type="item.type" />
-            </template>
-            <el-scrollbar height="400px">
+        <v-card>
+          <v-tabs v-model="activeName" class="demo-tabs" color="primary" grow>
+            <v-tab v-for="(item, index) in data" :text="item.name" :value="item.name" :key="index">
+              <template #append>
+                <v-badge :content="item.list.length" :max="badgeMax" />
+              </template>
+            </v-tab>
+          </v-tabs>
+          <v-tabs-window v-model="activeName">
+            <v-tabs-window-item v-for="(item, index) in data" :text="item.name" :value="item.name" :key="index">
               <NotifyList :list="item.list" />
-            </el-scrollbar>
-          </el-tab-pane>
-        </el-tabs>
-        <div class="notify-history">
-          <el-button link @click="handleHistory">查看{{ activeName }}历史</el-button>
-        </div>
+            </v-tabs-window-item>
+          </v-tabs-window>
+          <div class="notify-history">
+            <v-btn variant="text" color="primary" @click="handleHistory">查看{{ activeName }}历史</v-btn>
+          </div>
+        </v-card>
       </template>
-    </el-popover>
+    </v-menu>
   </div>
 </template>
 

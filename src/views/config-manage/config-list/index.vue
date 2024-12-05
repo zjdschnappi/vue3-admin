@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue"
+import { reactive, ref } from "vue"
 import { createTableDataApi, deleteTableDataApi, updateTableDataApi, getTableDataApi } from "@/api/table"
 import { type CreateOrUpdateTableRequestData, type TableData } from "@/api/table/types/table"
-import { type FormInstance, type FormRules, ElMessage, ElMessageBox } from "element-plus"
+
 import { usePagination } from "@/hooks/usePagination"
 import { cloneDeep } from "lodash-es"
 import { VForm } from "vuetify/components/VForm"
 
 const loading = ref<boolean>(false)
-const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
+const { paginationData } = usePagination()
 
 //#region 增
 const DEFAULT_FORM_DATA: CreateOrUpdateTableRequestData = {
@@ -17,27 +17,27 @@ const DEFAULT_FORM_DATA: CreateOrUpdateTableRequestData = {
   password: ""
 }
 const dialogVisible = ref<boolean>(false)
-const formRef = ref<FormInstance | null>(null)
+const formRef = ref<any>(null)
 const formData = ref<CreateOrUpdateTableRequestData>(cloneDeep(DEFAULT_FORM_DATA))
 const formRules = {
   username: [(value) => !!value || "请输入用户名"],
   password: [(value) => !!value || "请输入密码"]
 }
-const handleCreateOrUpdate = () => {
-  formRef.value?.validate((valid: boolean, fields) => {
-    if (!valid) return console.error("表单校验不通过", fields)
-    loading.value = true
-    const api = formData.value.id === undefined ? createTableDataApi : updateTableDataApi
-    api(formData.value)
-      .then(() => {
-        ElMessage.success("操作成功")
-        dialogVisible.value = false
-        getTableData()
-      })
-      .finally(() => {
-        loading.value = false
-      })
-  })
+const handleCreateOrUpdate = async () => {
+  if (!formRef.value) return
+  const { valid, errors } = await formRef.value.validate()
+  if (!valid) return console.error("表单校验不通过", errors)
+  loading.value = true
+  const api = formData.value.id === undefined ? createTableDataApi : updateTableDataApi
+  api(formData.value)
+    .then(() => {
+      // ElMessage.success("操作成功")
+      dialogVisible.value = false
+      getTableData()
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 const resetForm = () => {
   formRef.value?.clearValidate()
@@ -47,16 +47,16 @@ const resetForm = () => {
 
 //#region 删
 const handleDelete = (row: TableData) => {
-  ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning"
-  }).then(() => {
-    deleteTableDataApi(row.id).then(() => {
-      ElMessage.success("删除成功")
-      getTableData()
-    })
-  })
+  // ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, "提示", {
+  //   confirmButtonText: "确定",
+  //   cancelButtonText: "取消",
+  //   type: "warning"
+  // }).then(() => {
+  //   deleteTableDataApi(row.id).then(() => {
+  //     ElMessage.success("删除成功")
+  //     getTableData()
+  //   })
+  // })
 }
 //#endregion
 
@@ -83,7 +83,7 @@ const searchData = reactive({
   username: "",
   phone: ""
 })
-const loadItems = ({ page, itemsPerPage, sortBy }) => {
+const loadItems = ({ page, itemsPerPage }) => {
   getTableData({ page, itemsPerPage })
 }
 const getTableData = (props?) => {
@@ -202,7 +202,7 @@ const resetSearch = () => {
     >
       <template v-slot:default="{ isActive }">
         <v-card title="修改用户">
-          <v-form ref="formRef" :model="formData" style="padding: 10px">
+          <v-form ref="formRef" :model="formData" style="padding: 10px 40px">
             <v-text-field
               density="compact"
               variant="outlined"
@@ -211,7 +211,6 @@ const resetSearch = () => {
               label="用户名"
               placeholder="请输入"
             />
-
             <v-text-field
               density="compact"
               variant="outlined"

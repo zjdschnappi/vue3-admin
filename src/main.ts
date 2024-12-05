@@ -12,9 +12,10 @@ import { loadDirectives } from "@/directives"
 import "uno.css"
 import "normalize.css"
 import "element-plus/dist/index.css"
-import "element-plus/theme-chalk/dark/css-vars.css"
-import "vxe-table/lib/style.css"
-import "vxe-table-plugin-element/dist/style.css"
+// import "element-plus/theme-chalk/dark/css-vars.css"
+// import "vxe-table/lib/style.css"
+// import "vxe-table-plugin-element/dist/style.css"
+// import "@/styles/element-plus.css"
 import "@/styles/index.scss"
 
 const app = createApp(App)
