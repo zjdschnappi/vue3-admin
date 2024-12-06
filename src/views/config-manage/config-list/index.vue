@@ -6,6 +6,7 @@ import { type CreateOrUpdateTableRequestData, type TableData } from "@/api/table
 import { usePagination } from "@/hooks/usePagination"
 import { cloneDeep } from "lodash-es"
 import { VForm } from "vuetify/components/VForm"
+import { VConfirmEdit } from "vuetify/components"
 
 const loading = ref<boolean>(false)
 const { paginationData } = usePagination()
@@ -149,6 +150,7 @@ const resetSearch = () => {
         </v-row>
       </v-form>
     </v-container>
+    <v-divider />
     <v-container v-loading="loading" shadow="never">
       <div class="toolbar-wrapper">
         <div>
@@ -187,7 +189,7 @@ const resetSearch = () => {
             <span v-else>禁用</span>
           </template>
           <template v-slot:item.operate="{ item }">
-            <v-btn color="primary" size="small" @click="handleUpdate(item)" style="margin-right: 5px">修改</v-btn>
+            <v-btn color="primary" size="small" @click="handleUpdate(item)" style="margin-right: 10px">修改</v-btn>
             <v-btn color="danger" size="small" @click="handleDelete(item)">删除</v-btn>
           </template>
         </v-data-table-server>
@@ -198,33 +200,37 @@ const resetSearch = () => {
       v-model="dialogVisible"
       :title="formData.id === undefined ? '新增用户' : '修改用户'"
       @closed="resetForm"
-      width="30%"
+      width="500"
     >
-      <template v-slot:default="{ isActive }">
-        <v-card title="修改用户">
-          <v-form ref="formRef" :model="formData" style="padding: 10px 40px">
-            <v-text-field
-              density="compact"
-              variant="outlined"
-              :rules="formRules.username"
-              v-model="formData.username"
-              label="用户名"
-              placeholder="请输入"
-            />
-            <v-text-field
-              density="compact"
-              variant="outlined"
-              v-model="formData.password"
-              :rules="formRules.password"
-              label="密码"
-              placeholder="请输入"
-            />
+      <template v-slot:default>
+        <v-card title="修改用户" density="compact">
+          <v-form ref="formRef" :model="formData">
+            <v-card-text style="padding: 10px 20px">
+              <v-text-field
+                density="compact"
+                variant="outlined"
+                :rules="formRules.username"
+                v-model="formData.username"
+                label="用户名"
+                placeholder="请输入"
+              />
+              <v-text-field
+                density="compact"
+                variant="outlined"
+                v-model="formData.password"
+                :rules="formRules.password"
+                label="密码"
+                placeholder="请输入"
+              />
+            </v-card-text>
           </v-form>
 
-          <v-card-actions>
-            <v-btn @click="dialogVisible = false">取消</v-btn>
-            <v-btn color="primary" @click="handleCreateOrUpdate" :loading="loading">确认</v-btn>
-          </v-card-actions>
+          <v-container>
+            <div style="padding: 0px 15px; text-align: right">
+              <v-btn @click="dialogVisible = false" style="margin-right: 10px">取消</v-btn>
+              <v-btn color="primary" @click="handleCreateOrUpdate" :loading="loading">确认</v-btn>
+            </div>
+          </v-container>
         </v-card>
       </template>
     </v-dialog>

@@ -7,9 +7,6 @@ import SidebarItem from "./SidebarItem.vue"
 import Logo from "../Logo/index.vue"
 
 import { useLayoutMode } from "@/hooks/useLayoutMode"
-import { getCssVariableValue } from "@/utils"
-
-const v3SidebarMenuBgColor = getCssVariableValue("--v3-sidebar-menu-bg-color")
 
 const { isLeft, isTop } = useLayoutMode()
 
@@ -20,19 +17,16 @@ const settingsStore = useSettingsStore()
 const noHiddenRoutes = computed(() => permissionStore.routes.filter((item) => !item.meta?.hidden))
 const isCollapse = computed(() => !appStore.sidebar.opened)
 const isLogo = computed(() => isLeft.value && settingsStore.showLogo)
-const backgroundColor = computed(() => (isLeft.value ? v3SidebarMenuBgColor : undefined))
 
 const tipLineWidth = computed(() => {
   return !isTop.value ? "2px" : "0px"
 })
-
-console.log(noHiddenRoutes.value)
 </script>
 
 <template>
   <div :class="{ 'has-logo': isLogo }">
     <div style="position: relative; height: 100%">
-      <v-navigation-drawer :rail="isCollapse && !isTop" absolute :color="backgroundColor">
+      <v-navigation-drawer :rail="isCollapse && !isTop" absolute>
         <v-list nav activatable>
           <v-list-item v-if="isLogo" :active="false">
             <template #title>

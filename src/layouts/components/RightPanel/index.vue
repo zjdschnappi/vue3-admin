@@ -17,7 +17,7 @@ const show = ref(false)
   <div class="handle-button" @click="show = true">
     <v-icon :size="24" icon="mdi-wrench" />
   </div>
-  <v-navigation-drawer v-model="show" location="right" temporary>
+  <v-navigation-drawer v-model="show" location="right" temporary width="350">
     <slot />
   </v-navigation-drawer>
 </template>

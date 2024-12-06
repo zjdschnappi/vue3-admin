@@ -7,26 +7,57 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
 
 <template>
   <div class="select-layout-mode">
-    <v-tooltip text="左侧模式">
-      <template v-slot:activator="{ props }">
-        <v-container
-          v-bind="props"
-          class="layout-mode left"
-          :class="{ active: isLeft }"
-          @click="setLayoutMode(LayoutModeEnum.Left)"
-        >
-          <v-row no-gutters>
-            <v-col cols="6">
-              <div class="preview-aside" />
-            </v-col>
-            <v-col cols="6">
-              <div class="preview-header" />
-              <div class="preview-main" />
-            </v-col>
-          </v-row>
-        </v-container>
-      </template>
-    </v-tooltip>
+    <v-row>
+      <v-col>
+        <v-tooltip text="左侧模式">
+          <template v-slot:activator="{ props }">
+            <v-container
+              v-bind="props"
+              class="layout-mode left"
+              :class="{ active: isLeft }"
+              @click="setLayoutMode(LayoutModeEnum.Left)"
+            >
+              <v-row no-gutters>
+                <v-col cols="4">
+                  <div class="preview-aside" />
+                </v-col>
+                <v-col cols="8">
+                  <div class="preview-header" />
+                  <div class="preview-main" />
+                </v-col>
+              </v-row>
+            </v-container>
+          </template>
+        </v-tooltip>
+      </v-col>
+      <v-col>
+        <v-tooltip text="混合模式">
+          <template v-slot:activator="{ props }">
+            <v-container
+              v-bind="props"
+              class="layout-mode left-top"
+              :class="{ active: isLeftTop }"
+              @click="setLayoutMode(LayoutModeEnum.LeftTop)"
+            >
+              <v-row>
+                <v-col>
+                  <div class="preview-header" />
+                </v-col>
+              </v-row>
+              <v-row no-gutters>
+                <v-col cols="4">
+                  <div class="preview-aside" />
+                </v-col>
+                <v-col cols="8">
+                  <div class="preview-main" />
+                </v-col>
+              </v-row>
+            </v-container>
+          </template>
+        </v-tooltip>
+      </v-col>
+    </v-row>
+
     <!-- <v-tooltip text="顶部模式">
       <template v-slot:activator="{ props }">
         <v-container
@@ -40,37 +71,13 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
         </v-container>
       </template>
     </v-tooltip> -->
-    <v-tooltip text="混合模式">
-      <template v-slot:activator="{ props }">
-        <v-container
-          v-bind="props"
-          class="layout-mode left-top"
-          :class="{ active: isLeftTop }"
-          @click="setLayoutMode(LayoutModeEnum.LeftTop)"
-        >
-          <v-row>
-            <v-col>
-              <div class="preview-header" />
-            </v-col>
-          </v-row>
-          <v-row no-gutters>
-            <v-col cols="6">
-              <div class="preview-aside" />
-            </v-col>
-            <v-col cols="6">
-              <div class="preview-main" />
-            </v-col>
-          </v-row>
-        </v-container>
-      </template>
-    </v-tooltip>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .select-layout-mode {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .layout-mode {
@@ -90,15 +97,13 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
 
 .preview-header {
   height: 8px;
-  width: 22px;
 }
 .preview-main {
   height: 52px;
-  width: 22px;
 }
 
 .preview-aside {
-  width: 12px;
+  width: 50%;
   height: 100%;
 }
 
@@ -116,7 +121,6 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
 
 .top {
   .preview-header {
-    width: 34px;
     background-color: var(--el-color-primary);
   }
   .preview-main {
@@ -126,7 +130,6 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
 
 .left-top {
   .preview-header {
-    width: 40px;
     background-color: var(--el-fill-color-darker);
   }
   .preview-aside {

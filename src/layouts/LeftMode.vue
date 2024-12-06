@@ -76,7 +76,6 @@ $transition-time: 0.35s;
   left: 0;
   z-index: 1001;
   overflow: hidden;
-  border-right: var(--v3-sidebar-border-right);
 }
 
 .main-container {
@@ -98,9 +97,9 @@ $transition-time: 0.35s;
 .layout-header {
   position: relative;
   z-index: 9;
-  background-color: var(--v3-header-bg-color);
+  // background-color: var(--v3-header-bg-color);
   box-shadow: var(--v3-header-box-shadow);
-  border-bottom: var(--v3-header-border-bottom);
+  // border-bottom: var(--v3-header-border-bottom);
 }
 
 .app-main {
