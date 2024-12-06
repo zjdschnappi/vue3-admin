@@ -56,12 +56,20 @@ const resolvePath = (routePath: string) => {
 <template>
   <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
     <SidebarItemLink v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
-      <v-list-item link :index="resolvePath(theOnlyOneChild.path)" :title="theOnlyOneChild.meta.title" />
+      <v-list-item link :index="resolvePath(theOnlyOneChild.path)" :title="theOnlyOneChild.meta.title">
+        <template v-if="theOnlyOneChild.meta?.elIcon" #prepend>
+          <v-icon :icon="theOnlyOneChild.meta?.elIcon" />
+        </template>
+      </v-list-item>
     </SidebarItemLink>
   </template>
   <v-list-group v-else :value="parentProps.item.meta?.title">
     <template v-slot:activator="{ props }">
-      <v-list-item v-bind="props" :title="parentProps.item.meta?.title" />
+      <v-list-item v-bind="props" :title="parentProps.item.meta?.title">
+        <template #prepend>
+          <v-icon :icon="parentProps.item.meta?.elIcon" />
+        </template>
+      </v-list-item>
     </template>
     <template v-if="parentProps.item.children">
       <SidebarItem

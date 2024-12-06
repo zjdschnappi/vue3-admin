@@ -14,16 +14,16 @@ const { isMobile } = useDevice()
   <div class="search-footer">
     <template v-if="!isMobile">
       <span class="search-footer-item">
-        <SvgIcon name="keyboard-enter" />
+        <v-icon icon="mdi-keyboard-return" />
         <span>确认</span>
       </span>
       <span class="search-footer-item">
-        <SvgIcon name="keyboard-up" />
-        <SvgIcon name="keyboard-down" />
+        <v-icon icon="mdi-chevron-up" />
+        <v-icon icon="mdi-chevron-down" />
         <span>切换</span>
       </span>
       <span class="search-footer-item">
-        <SvgIcon name="keyboard-esc" />
+        <v-icon icon="mdi-keyboard-esc" />
         <span>关闭</span>
       </span>
     </template>
@@ -36,6 +36,7 @@ const { isMobile } = useDevice()
   display: flex;
   color: var(--el-text-color-secondary);
   font-size: 14px;
+  padding: 10px 10px;
   &-item {
     display: flex;
     align-items: center;

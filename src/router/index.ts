@@ -55,7 +55,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "Dashboard",
         meta: {
           title: "首页",
-          svgIcon: "dashboard",
+          elIcon: "mdi-home",
           affix: true
         }
       }
@@ -68,7 +68,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     name: "config-manage",
     meta: {
       title: "配置管理",
-      elIcon: "Grid",
+      elIcon: "mdi-cog",
       alwaysShow: true
     },
     children: [
@@ -98,7 +98,7 @@ export const dynamicRoutes: RouteRecordRaw[] = [
     name: "Permission",
     meta: {
       title: "权限",
-      svgIcon: "lock",
+      elIcon: "mdi-lock",
       roles: ["admin", "editor"], // 可以在根路由中设置角色
       alwaysShow: true // 将始终显示根菜单
     },

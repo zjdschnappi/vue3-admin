@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref, shallowRef } from "vue"
+import { computed, ref, shallowRef, watchEffect } from "vue"
 import { type RouteRecordName, type RouteRecordRaw, useRouter } from "vue-router"
 import { usePermissionStore } from "@/store/modules/permission"
 import SearchResult from "./SearchResult.vue"
 import SearchFooter from "./SearchFooter.vue"
-import { ElMessage, ElScrollbar } from "element-plus"
+// import { ElMessage, ElScrollbar } from "element-plus"
 import { cloneDeep, debounce } from "lodash-es"
 import { useDevice } from "@/hooks/useDevice"
 import { isExternal } from "@/utils/validate"
@@ -16,7 +16,7 @@ const router = useRouter()
 const { isMobile } = useDevice()
 
 const inputRef = ref<HTMLInputElement | null>(null)
-const scrollbarRef = ref<InstanceType<typeof ElScrollbar> | null>(null)
+const scrollbarRef = ref<InstanceType<any> | null>(null)
 const searchResultRef = ref<InstanceType<typeof SearchResult> | null>(null)
 
 const keyword = ref<string>("")
@@ -53,13 +53,15 @@ const flatTree = (arr: RouteRecordRaw[], result: RouteRecordRaw[] = []) => {
 /** 关闭搜索对话框 */
 const handleClose = () => {
   modelValue.value = false
+  handleClear()
+}
+const handleClear = () => {
   // 延时处理防止用户看到重置数据的操作
   setTimeout(() => {
     keyword.value = ""
     resultList.value = []
   }, 200)
 }
-
 /** 根据下标位置进行滚动 */
 const scrollTo = (index: number) => {
   if (!searchResultRef.value) return
@@ -129,17 +131,22 @@ const handleEnter = () => {
     return
   }
   if (!name) {
-    ElMessage.warning("无法通过搜索进入该菜单，请为对应的路由设置唯一的 Name")
+    // ElMessage.warning("无法通过搜索进入该菜单，请为对应的路由设置唯一的 Name")
     return
   }
   try {
     router.push({ name })
   } catch {
-    ElMessage.error("该菜单有必填的动态参数，无法通过搜索进入")
+    // ElMessage.error("该菜单有必填的动态参数，无法通过搜索进入")
     return
   }
   handleClose()
 }
+watchEffect(() => {
+  if (!modelValue.value) {
+    handleClear()
+  }
+})
 
 /** 释放上键或下键 */
 const handleReleaseUpOrDown = () => {
@@ -148,42 +155,51 @@ const handleReleaseUpOrDown = () => {
 </script>
 
 <template>
-  <el-dialog
+  <v-dialog
     v-model="modelValue"
-    @opened="inputRef?.focus()"
-    @closed="inputRef?.blur()"
     @keydown.up="handleUp"
     @keydown.down="handleDown"
     @keydown.enter="handleEnter"
     @keyup.up.down="handleReleaseUpOrDown"
-    :before-close="handleClose"
     :width="modalWidth"
     top="5vh"
     class="search-modal__private"
-    append-to-body
   >
-    <el-input ref="inputRef" v-model="keyword" @input="handleSearch" placeholder="搜索菜单" size="large" clearable>
-      <template #prefix>
-        <SvgIcon name="search" />
+    <v-card>
+      <template #title>
+        <v-text-field
+          ref="inputRef"
+          v-model="keyword"
+          @update:model-value="handleSearch"
+          placeholder="搜索菜单"
+          clearable
+        >
+          <template #prepend-inner>
+            <v-icon icon="mdi-file-find" />
+          </template>
+        </v-text-field>
       </template>
-    </el-input>
-    <el-empty v-if="resultList.length === 0" description="暂无搜索结果" :image-size="100" />
-    <template v-else>
-      <p>搜索结果</p>
-      <el-scrollbar ref="scrollbarRef" max-height="40vh" always>
-        <SearchResult
-          ref="searchResultRef"
-          v-model="activeRouteName"
-          :list="resultList"
-          :isPressUpOrDown="isPressUpOrDown"
-          @click="handleEnter"
-        />
-      </el-scrollbar>
-    </template>
-    <template #footer>
-      <SearchFooter :total="resultList.length" />
-    </template>
-  </el-dialog>
+
+      <v-empty-state v-if="resultList.length === 0" icon="mdi-magnify" text="暂无搜索结果" />
+      <template v-else>
+        <!-- <el-scrollbar ref="scrollbarRef" max-height="40vh" always> -->
+        <div style="max-height: 40vh; overflow: auto; padding: 20px; margin-top: -20px">
+          <p>搜索结果</p>
+          <SearchResult
+            ref="searchResultRef"
+            v-model="activeRouteName"
+            :list="resultList"
+            :isPressUpOrDown="isPressUpOrDown"
+            @click="handleEnter"
+          />
+        </div>
+      </template>
+
+      <v-card border>
+        <SearchFooter :total="resultList.length" />
+      </v-card>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style lang="scss">

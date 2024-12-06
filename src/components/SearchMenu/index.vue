@@ -12,18 +12,11 @@ const handleOpen = () => {
 
 <template>
   <div>
-    <el-tooltip effect="dark" content="搜索菜单" placement="bottom">
-      <SvgIcon name="search" @click="handleOpen" />
-    </el-tooltip>
+    <v-tooltip text="搜索菜单">
+      <template #activator="{ props }"> <v-icon v-bind="props" @click="handleOpen" icon="mdi-file-find" /></template>
+    </v-tooltip>
     <SearchModal v-model="modalVisible" />
   </div>
 </template>
 
-<style lang="scss" scoped>
-.svg-icon {
-  font-size: 20px;
-  &:focus {
-    outline: none;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
