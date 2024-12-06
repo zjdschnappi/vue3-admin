@@ -8,8 +8,7 @@
 // Vxe Table
 // @import "./vxe-table.css";
 // @import "./vxe-table.scss";
-// 注册多主题
-@import "./theme/register.scss";
+
 // Mixins
 @import "./mixins.scss";
 // View Transition
@@ -27,7 +26,7 @@ html {
 body {
   height: 100%;
   color: var(--v3-body-text-color);
-  background-color: var(--v3-body-bg-color);
+  // background-color: var(--v3-body-bg-color);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,

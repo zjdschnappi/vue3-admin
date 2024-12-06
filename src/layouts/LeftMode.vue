@@ -66,7 +66,7 @@ $transition-time: 0.35s;
 }
 
 .sidebar-container {
-  background-color: var(--v3-sidebar-menu-bg-color);
+  // background-color: var(--v3-sidebar-menu-bg-color);
   transition: width $transition-time;
   width: var(--v3-sidebar-width) !important;
   height: 100%;
@@ -106,6 +106,7 @@ $transition-time: 0.35s;
   min-height: calc(100vh - var(--v3-navigationbar-height));
   position: relative;
   overflow: hidden;
+  padding: 20px;
 }
 
 .fixed-header + .app-main {

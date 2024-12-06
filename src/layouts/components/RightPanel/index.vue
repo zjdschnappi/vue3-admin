@@ -17,12 +17,13 @@ const show = ref(false)
   <div class="handle-button" @click="show = true">
     <v-icon :size="24" icon="mdi-wrench" />
   </div>
-  <v-navigation-drawer v-model="show" location="right" temporary width="350">
+  <v-navigation-drawer class="drawer" v-model="show" location="right" temporary width="350">
     <slot />
   </v-navigation-drawer>
 </template>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins.scss";
 .handle-button {
   width: 48px;
   height: 48px;
@@ -38,5 +39,12 @@ const show = ref(false)
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.drawer {
+  :deep() {
+    .v-navigation-drawer__content {
+      @extend %scrollbar;
+    }
+  }
 }
 </style>

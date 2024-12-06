@@ -1,6 +1,5 @@
 /** 全局 CSS 变量，这种变量不仅可以在 CSS 和 SCSS 中使用，还可以导入到 JS 中使用 */
 html {
-  color-scheme: dark;
   --el-color-primary: #409eff;
   --el-color-primary-light-3: rgb(50.8, 116.6, 184.5);
   --el-color-primary-light-5: rgb(42, 89, 137.5);

@@ -5,7 +5,6 @@ import { useSettingsStore } from "@/store/modules/settings"
 import { useLayoutMode } from "@/hooks/useLayoutMode"
 import { resetConfigLayout } from "@/utils"
 import SelectLayoutMode from "./SelectLayoutMode.vue"
-import { Refresh } from "@element-plus/icons-vue"
 
 const { isLeft } = useLayoutMode()
 const settingsStore = useSettingsStore()
@@ -80,10 +79,10 @@ watchEffect(() => {
 
 .setting-container {
   padding: 20px;
+  max-height: 100vh;
   .setting-item {
     font-size: 14px;
-    color: var(--el-text-color-regular);
-    padding: 5px 0;
+    padding: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -21,10 +21,10 @@ const settingsStore = useSettingsStore()
       <!-- 页脚 -->
       <Footer v-if="settingsStore.showFooter" />
     </div>
-    <!-- 返回顶部 -->
-    <el-backtop />
+    <!-- 返回顶部
+     <el-backtop /> -->
     <!-- 返回顶部（固定 Header 情况下） -->
-    <el-backtop target=".app-scrollbar" />
+    <!-- <el-backtop target=".app-scrollbar" /> -->
   </section>
 </template>
 
