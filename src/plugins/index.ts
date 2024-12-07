@@ -1,12 +1,10 @@
 import { type App } from "vue"
-// import { loadElementPlus } from "./element-plus"
 import { loadVuetify } from "./vuetify"
-// import { loadElementPlusIcon } from "./element-plus-icon"
-import { loadVxeTable } from "./vxe-table"
+import { loadIstockPlugin } from "./istock-plugin"
+// import { loadElementPlus } from "./element-plus"
 
 export function loadPlugins(app: App) {
   // loadElementPlus(app)
-  // loadElementPlusIcon(app)
-  loadVxeTable(app)
   loadVuetify(app)
+  loadIstockPlugin(app)
 }

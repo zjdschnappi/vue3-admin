@@ -87,12 +87,12 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
   border-radius: 6px;
   border: 2px solid transparent;
   &:hover {
-    border: 2px solid var(--el-color-primary);
+    border: 2px solid var(--i-color-primary);
   }
 }
 
 .active {
-  border: 2px solid var(--el-color-primary);
+  border: 2px solid var(--i-color-primary);
 }
 
 .preview-header {
@@ -109,34 +109,34 @@ const { isLeft, isLeftTop, setLayoutMode } = useLayoutMode()
 
 .left {
   .preview-header {
-    background-color: var(--el-fill-color-darker);
+    background-color: var(--i-fill-color-darker);
   }
   .preview-aside {
-    background-color: var(--el-color-primary);
+    background-color: var(--i-color-primary);
   }
   .preview-main {
-    background-color: var(--el-fill-color-lighter);
+    background-color: var(--i-fill-color-lighter);
   }
 }
 
 .top {
   .preview-header {
-    background-color: var(--el-color-primary);
+    background-color: var(--i-color-primary);
   }
   .preview-main {
-    background-color: var(--el-fill-color-lighter);
+    background-color: var(--i-fill-color-lighter);
   }
 }
 
 .left-top {
   .preview-header {
-    background-color: var(--el-fill-color-darker);
+    background-color: var(--i-fill-color-darker);
   }
   .preview-aside {
-    background-color: var(--el-color-primary);
+    background-color: var(--i-color-primary);
   }
   .preview-main {
-    background-color: var(--el-fill-color-lighter);
+    background-color: var(--i-fill-color-lighter);
   }
 }
 </style>

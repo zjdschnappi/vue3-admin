@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { reactive, ref } from "vue"
+import { getCurrentInstance, reactive, ref } from "vue"
 import { createTableDataApi, deleteTableDataApi, updateTableDataApi, getTableDataApi } from "@/api/table"
 import { type CreateOrUpdateTableRequestData, type TableData } from "@/api/table/types/table"
 
 import { usePagination } from "@/hooks/usePagination"
 import { cloneDeep } from "lodash-es"
 import { VForm } from "vuetify/components/VForm"
-import { VConfirmEdit } from "vuetify/components"
 
 const loading = ref<boolean>(false)
 const { paginationData } = usePagination()
@@ -24,6 +23,7 @@ const formRules = {
   username: [(value) => !!value || "请输入用户名"],
   password: [(value) => !!value || "请输入密码"]
 }
+const instance = getCurrentInstance()
 const handleCreateOrUpdate = async () => {
   if (!formRef.value) return
   const { valid, errors } = await formRef.value.validate()
@@ -48,16 +48,21 @@ const resetForm = () => {
 
 //#region 删
 const handleDelete = (row: TableData) => {
-  // ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, "提示", {
-  //   confirmButtonText: "确定",
-  //   cancelButtonText: "取消",
-  //   type: "warning"
-  // }).then(() => {
-  //   deleteTableDataApi(row.id).then(() => {
-  //     ElMessage.success("删除成功")
-  //     getTableData()
-  //   })
-  // })
+  instance?.proxy?.$IMessageBox?.confirm("确认删除？", "提示", {
+    beforeClose: (action, vm, done) => {
+      if (action === "confirm") {
+        vm.confirmButtonLoading = true
+        deleteTableDataApi(row.id).then(() => {
+          done()
+          instance?.proxy?.$IMessage?.success({ message: "删除成功" })
+          vm.confirmButtonLoading = false
+          getTableData()
+        })
+      } else {
+        done()
+      }
+    }
+  })
 }
 //#endregion
 
@@ -240,9 +245,6 @@ const resetSearch = () => {
 <style lang="scss" scoped>
 .search-wrapper {
   margin-bottom: 20px;
-  :deep(.el-card__body) {
-    padding-bottom: 2px;
-  }
 }
 
 .toolbar-wrapper {
