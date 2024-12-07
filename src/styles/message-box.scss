@@ -1,0 +1,144 @@
+.i-message-box {
+  --i-messagebox-title-color: var(--i-text-color-primary);
+  --i-messagebox-width: 420px;
+  --i-messagebox-border-radius: 4px;
+  --i-messagebox-box-shadow: var(--i-box-shadow-light);
+  --i-messagebox-font-size: 16px;
+  --i-messagebox-content-font-size: 14px;
+  --i-messagebox-content-color: var(--i-text-color-regular);
+  --i-messagebox-error-font-size: 12px;
+  --i-messagebox-padding-primary: 12px;
+  --i-messagebox-font-line-height: var(--i-font-line-height-primary);
+  display: inline-block;
+  position: relative;
+  max-width: var(--i-messagebox-width);
+  width: 100%;
+  padding: var(--i-messagebox-padding-primary);
+  vertical-align: middle;
+  background-color: rgb(var(--v-theme-surface));
+  border-radius: var(--i-messagebox-border-radius);
+  font-size: var(--i-messagebox-font-size);
+  box-shadow: var(--i-messagebox-box-shadow);
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+  text-align: left;
+  overflow: hidden;
+  backface-visibility: hidden;
+  // To avoid small screen overflowing, see #11919
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+
+  &:focus {
+    outline: none !important;
+  }
+
+  @at-root .i-overlay.is-message-box {
+    contain: none;
+    .i-overlay-message-box {
+      text-align: center;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 16px;
+      overflow: auto;
+
+      &::after {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        width: 0;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  &__header {
+    padding-bottom: var(--i-messagebox-padding-primary);
+
+    &.show-close {
+      padding-right: 5px;
+    }
+  }
+
+  &__title {
+    font-size: 18px;
+    line-height: var(--i-messagebox-font-line-height);
+  }
+
+  &__headerbtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+
+    &__close {
+      font-size: inherit;
+    }
+
+    &:focus,
+    &:hover {
+      &__close {
+        color: var(--i-color-primary);
+      }
+    }
+  }
+
+  &__content {
+    font-size: 14px;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__message {
+    margin: 0;
+
+    & p {
+      margin: 0;
+      line-height: var(--i-messagebox-font-line-height);
+    }
+  }
+
+  &__btns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: var(--i-messagebox-padding-primary);
+  }
+}
+
+.fade-in-linear-enter-active {
+  .i-overlay-message-box {
+    animation: msgbox-fade-in var(--i-transition-duration);
+  }
+}
+
+.fade-in-linear-leave-active {
+  .i-overlay-message-box {
+    animation: msgbox-fade-in var(--i-transition-duration) reverse;
+  }
+}
+
+@keyframes msgbox-fade-in {
+  0% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
